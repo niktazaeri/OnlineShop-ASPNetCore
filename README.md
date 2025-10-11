@@ -15,6 +15,7 @@ The frontend pages are rendered by MVC views, while all dynamic content is loade
 
 ### General Features
 - Multi-category product structure (e.g., _Clothes_, _Kitchen_, _Electronics_)
+- register , login , logout
 - API-first architecture – frontend interacts with backend through RESTful APIs
 - MVC controllers are only responsible for rendering views
 - Fully asynchronous data loading via JavaScript `fetch()` calls
