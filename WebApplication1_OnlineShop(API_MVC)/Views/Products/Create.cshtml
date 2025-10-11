@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<form id="product-form">
+    <div class="form-group">
+        <label for="name">Product Name</label>
+        <input name="name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input name="description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input name="price" type="number" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input name="quantity" type="number" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <select name="categoryId" class="form-control" required>
+            <option value="">-- Select Category --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Product</button>
+</form>
+
+
+@section Scripts{
+    <script type="module" src="~/js/adminScripts/productScripts/addProduct.js"></script>
+}

@@ -1,0 +1,18 @@
+﻿
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Index";
+}
+
+<h2>Categories</h2>
+<a asp-controller="Categories" asp-action="Create" class="btn btn-success mt-4">Create</a>
+
+
+<div id="categories-container"></div>
+
+
+@section Scripts{
+    <script src="~/js/adminScripts/categoryScripts/categories_list.js"></script>
+}
+
+

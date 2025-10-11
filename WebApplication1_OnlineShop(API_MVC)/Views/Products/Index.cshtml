@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "All Products";
+}
+
+<h2>All Products</h2>
+
+<div class="mb-3">
+    <label for="categoryFilter" class="form-label">Filter by Category:</label>
+    <select id="categoryFilter" class="form-select">
+        <option value="">All Categories</option>
+    </select>
+</div>
+
+<div id="products-container" class="row"></div>
+
+@section Scripts {
+    <script src="~/js/adminScripts/productScripts/products_list.js"></script>
+}

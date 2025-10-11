@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<form id="product-form">
+    <div class="form-group">
+        <label>Product Image</label>
+        <input type="file" name="PictureFile" accept=".jpg,.jpeg,.webp" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Name</label>
+        <input name="Name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Description</label>
+        <input name="Description" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Price</label>
+        <input name="Price" type="number" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Quantity</label>
+        <input name="Quantity" type="number" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <select name="CategoryId" class="form-control" required>
+            <option value="">-- Select Category --</option>
+            <!-- JS populates -->
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+@section Scripts{
+    <script type="module" src="~/js/adminScripts/productScripts/editProduct.js"></script>
+}
+

@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Welcome to the Shop</h1>
+        <p class="lead">Browse our categories and products below</p>
+    </div>
+
+    <div id="categoriesContainer" class="mb-5">
+        <h3>Categories</h3>
+        <div class="row" id="categoriesList"></div>
+    </div>
+
+    <div id="productsContainer">
+        <h3>Products</h3>
+        <div class="row" id="productsList"></div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/home/Home.js"></script>
+}

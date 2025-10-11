@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Category";
+}
+
+<h2>Edit Category</h2>
+
+@* <input type="hidden" id="categoryId" value="@ViewBag.CategoryId" /> *@
+
+<div class="form-group">
+    <label for="categoryName">Category Name:</label>
+    <input type="text" id="categoryName" class="form-control" />
+</div>
+
+<button id="btnUpdate" class="btn btn-primary mt-2">Update</button>
+
+@section Scripts {
+    <script type="module" src="~/js/adminScripts/categoryScripts/editCategory.js"></script>
+}

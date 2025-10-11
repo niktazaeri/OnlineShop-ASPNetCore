@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<!-- Add Product Link -->
+<div class="mb-3">
+    <a id="createProductLink" class="btn btn-success" href="#">Create New Product</a>
+</div>
+
+<!-- Placeholder for product list -->
+<div id="products-list"></div>
+
+@section Scripts {
+    <script src="~/js/adminScripts/categoryScripts/products.js"></script>
+}

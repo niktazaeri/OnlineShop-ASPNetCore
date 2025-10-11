@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="category-form">
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input name="name" id="name" class="form-control" />
+                <span class="text-danger" id="name-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="parentCategory" class="control-label">Parent Category (optional)</label>
+                <select name="parentCategory" id="parentCategory" class="form-control">
+                    <option value="">-- None --</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
+
+@section Scripts {
+    <script type="module" src="~/js/adminScripts/categoryScripts/addCategory.js"></script>
+}
