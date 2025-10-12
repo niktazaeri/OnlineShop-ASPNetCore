@@ -22,7 +22,7 @@ The frontend pages are rendered by MVC views, while all dynamic content is loade
 
 ### Authentication & Security
 - **JWT Authentication** for API requests
-- **Cookies** used for frontend session persistence
+- **Cookies** used for accessing the rezor pages
 - Login / Register, Password Reset, Forgot Password, Change Password
 
 ### Admin Panel
@@ -47,7 +47,7 @@ The frontend pages are rendered by MVC views, while all dynamic content is loade
 - HTML5 / Bootstrap
 
 ## Architecture
-- Controllers (MVC): Render pages only
+- Controllers (MVC): Render pages only (razor pages)
 - Controllers (API): Provide RESTful endpoints for frontend
 - JavaScript (Frontend): Calls APIs to display dynamic content
 
