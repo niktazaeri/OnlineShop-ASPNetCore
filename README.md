@@ -14,14 +14,15 @@ The frontend pages are rendered by MVC views, while all dynamic content is loade
 ## Features
 
 ### General Features
-- Multi-category product structure (e.g., _Clothes_, _Kitchen_, _Electronics_)
+- Multi-category product structure (e.g., _Clothes_, _Kitchen_, _Electronics_) including subcategories using LinQ and entity relations
+- register , login , logout
 - API-first architecture – frontend interacts with backend through RESTful APIs
 - MVC controllers are only responsible for rendering views
 - Fully asynchronous data loading via JavaScript `fetch()` calls
 
 ### Authentication & Security
 - **JWT Authentication** for API requests
-- **Cookies** used for frontend session persistence
+- **Cookies** used for accessing the rezor pages
 - Login / Register, Password Reset, Forgot Password, Change Password
 
 ### Admin Panel
@@ -46,7 +47,7 @@ The frontend pages are rendered by MVC views, while all dynamic content is loade
 - HTML5 / Bootstrap
 
 ## Architecture
-- Controllers (MVC): Render pages only
+- Controllers (MVC): Render pages only (razor pages)
 - Controllers (API): Provide RESTful endpoints for frontend
 - JavaScript (Frontend): Calls APIs to display dynamic content
 
