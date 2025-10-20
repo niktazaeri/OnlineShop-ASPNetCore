@@ -1,0 +1,19 @@
+﻿@* Views/Shared/_CustomerSidebar.cshtml *@
+<div class="list-group shadow-sm">
+    <a asp-controller="Customer" asp-action="Profile"
+       class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "active" : "")">
+        <i class="bi bi-person-circle me-2"></i> Edit Profile
+    </a>
+    <a asp-controller="Customer" asp-action="Addresses"
+       class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"]?.ToString() == "Addresses" ? "active" : "")">
+        <i class="bi bi-person-circle me-2"></i> Addresses
+    </a>
+    <a asp-controller="Customer" asp-action="ChangePassword"
+       class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"]?.ToString() == "ChangePassword" ? "active" : "")">
+        <i class="bi bi-lock me-2"></i> Change Password
+    </a>
+    <a asp-controller="Customer" asp-action="OrdersHistoy"
+       class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"]?.ToString() == "OrdersHistoy" ? "active" : "")">
+        <i class="bi bi-lock me-2"></i> Orders History
+    </a>
+</div>

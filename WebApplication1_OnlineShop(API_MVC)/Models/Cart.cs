@@ -8,9 +8,10 @@ namespace WebApplication1_API_MVC_.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? CartIdentifier { get; set; }
         public ApplicationUser User { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
     }

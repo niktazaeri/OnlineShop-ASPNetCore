@@ -1,128 +1,52 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
-    //setupNavbar();
-    loadCategories();
-    loadAllProducts();
+﻿export { }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryId = urlParams.get("categoryId");
+
+    window.addToCart = addToCart;
+    window.changeQuantity = changeQuantity;
+
+    // get cart information
+    const cart = await fetchCart();
+
+    if (categoryId) {
+        loadCategoryProducts(categoryId, cart);
+    } else {
+        loadAllProducts(cart);
+    }
 });
 
-//function setupNavbar() {
-//    const token = localStorage.getItem("token");
-//    const navBar = document.querySelectorAll(".navbar-nav")[1]; // Right side
-//    navBar.innerHTML = "";
-
-//    if (token) {
-//        navBar.innerHTML = `
-//            <li class="nav-item">
-//                <a class="nav-link text-dark" href="/Account/logout">Logout</a>
-//            </li>
-//        `;
-//    } else {
-//        navBar.innerHTML = `
-//            <li class="nav-item">
-//                <a class="nav-link text-dark" href="/Account/Login">Login</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-dark" href="/Account/sign-up">Register</a>
-//            </li>
-//        `;
-//    }
-//}
-
-
-// Load categories on page load
-function loadCategories() {
-    fetch('/api/categories')
-        .then(res => res.json())
-        .then(data => {
-            const categoryMap = {};
-            const roots = [];
-
-            data.forEach(cat => {
-                cat.subs = [];
-                categoryMap[cat.id] = cat;
-            });
-
-            data.forEach(cat => {
-                if (cat.categoryParentId == null) {
-                    roots.push(cat);
-                } else {
-                    const parent = categoryMap[cat.categoryParentId];
-                    if (parent) parent.subs.push(cat);
-                }
-            });
-
-            const menu = document.getElementById('categoriesMenu');
-            menu.innerHTML = '';
-
-            roots.forEach(cat => {
-                menu.appendChild(buildCategoryItem(cat));
-            });
-
-            const categoriesList = document.getElementById('categoriesList');
-            if (categoriesList) {
-                let html = '';
-                roots.forEach(cat => {
-                    html += `
-                        <div class="col-md-3 mb-3">
-                            <div class="card h-100 border-secondary shadow">
-                                <div class="card-body">
-                                    <h5 class="card-title">${cat.name}</h5>
-                                    <button class="btn btn-primary btn-sm" onclick="loadCategoryProducts(${cat.id})">View Products</button>
-                                </div>
-                            </div>
-                        </div>`;
-                });
-                categoriesList.innerHTML = html;
-            }
-        });
-}
-
-function buildCategoryItem(category) {
-    const li = document.createElement('li');
-
-    if (category.subs.length > 0) {
-        li.classList.add('dropdown-submenu');
-        const a = document.createElement('a');
-        a.classList.add('dropdown-item', 'dropdown-toggle');
-        a.href = '#';
-        a.textContent = category.name;
-
-        a.addEventListener('click', function (e) {
-            e.preventDefault();
-            loadCategoryProducts(category.id);
-        });
-
-        const submenu = document.createElement('ul');
-        submenu.classList.add('dropdown-menu');
-
-        category.subs.forEach(sub => submenu.appendChild(buildCategoryItem(sub)));
-
-        li.appendChild(a);
-        li.appendChild(submenu);
-    } else {
-        li.innerHTML = `<a class="dropdown-item" href="#" onclick="loadCategoryProducts(${category.id})">${category.name}</a>`;
+async function fetchCart() {
+    try {
+        const res = await fetch("/api/cart");
+        if (!res.ok) return null;
+        return await res.json();
+    } catch {
+        console.warn("⚠️ Failed to load cart");
+        return null;
     }
-
-    return li;
 }
 
-function loadAllProducts() {
+function loadAllProducts(cart) {
     fetch('/api/products')
         .then(res => res.json())
-        .then(data => renderProducts(data.products, data.imagePaths));
+        .then(data => renderProducts(data.products, data.imagePaths, cart));
 }
 
-function loadCategoryProducts(categoryId) {
+function loadCategoryProducts(categoryId, cart) {
     fetch(`/api/categories/${categoryId}/products`)
         .then(res => res.json())
-        .then(data => {
-            console.log("Fetched products:", data);
-            renderProducts(data.products, data.imagePaths);
-        });
-
+        .then(data => renderProducts(data.products, data.imagePaths, cart));
 }
 
-function renderProducts(products, imagePaths = []) {
+function renderProducts(products, imagePaths = [], cart = null) {
     const container = document.getElementById('productsList');
+    if (!container) {
+        console.warn("⚠️ productsList element not found. Probably not on Home page.");
+        return;
+    }
+
     let html = '';
 
     if (!Array.isArray(products) || products.length === 0) {
@@ -133,17 +57,47 @@ function renderProducts(products, imagePaths = []) {
                 </div>
             </div>`;
     } else {
+        const cartItems = cart?.cartItems || [];
+
         products.forEach((p, i) => {
-            const imgPath = imagePaths[i] ? `/images/${imagePaths[i]}/${p.pictureName}` : `/images/${p.pictureName}`;
+            const imgPath = imagePaths[i]
+                ? `/images/${imagePaths[i]}/${p.pictureName}`
+                : `/images/${p.pictureName}`;
+
+            // if product is in cart
+            const existingItem = cartItems.find(ci => ci.productId === p.id);
+            let cartControlHtml = '';
+
+            if (existingItem) {
+                // show _ , +
+                cartControlHtml = `
+                    <div class="d-flex justify-content-center align-items-center" id="cart-controls-${p.id}">
+                        <button class="btn btn-outline-secondary btn-sm"
+                                onclick="changeQuantity(${p.id}, 'decrease')">-</button>
+                        <span class="mx-2" id="qty-${p.id}">${existingItem.quantity}</span>
+                        <button class="btn btn-outline-secondary btn-sm"
+                                onclick="changeQuantity(${p.id}, 'increase')">+</button>
+                    </div>`;
+            } else {
+                // show add to cart btn
+                cartControlHtml = `
+                    <div id="cart-controls-${p.id}">
+                        <button class="btn btn-outline-primary btn-sm"
+                                onclick="addToCart(${p.id}, '${p.name}', ${p.price})">
+                            Add to Cart
+                        </button>
+                    </div>`;
+            }
 
             html += `
                 <div class="col-md-3 mb-3">
-                    <div class="card h-100 border-primary shadow">
+                    <div class="card h-100 border-primary shadow text-center p-2">
                         <img src="${imgPath}" class="card-img-top" alt="${p.name}">
                         <div class="card-body">
                             <h5 class="card-title">${p.name}</h5>
                             <p class="card-text">Price: $${p.price}</p>
                             <p class="card-text">Available: ${p.quantity}</p>
+                            ${cartControlHtml}
                         </div>
                     </div>
                 </div>`;
@@ -152,4 +106,3 @@ function renderProducts(products, imagePaths = []) {
 
     container.innerHTML = html;
 }
-

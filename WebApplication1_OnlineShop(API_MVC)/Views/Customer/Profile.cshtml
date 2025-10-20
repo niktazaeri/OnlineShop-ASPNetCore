@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <partial name="_CustomerSidebar" />
+    </div>
+
+    <div class="col-md-9">
+        <h1 class="text-center">Profile</h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form id="editProfileForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="username" class="form-control" required>
+                        <div class="text-danger small mt-1" id="errorUsername"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" id="firstName" class="form-control" required>
+                        <div class="text-danger small mt-1" id="errorFirstName"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" id="lastName" class="form-control" required>
+                        <div class="text-danger small mt-1" id="errorLastName"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                        <div class="text-danger small mt-1" id="errorEmail"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="phoneNumber" class="form-control">
+                        <div class="text-danger small mt-1" id="errorPhoneNumber"></div>
+                    </div>
+
+                    <div id="generalError" class="text-danger small mb-3"></div>
+
+                    <button type="button" id="saveProfileBtn" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/customerScripts/profile/editProfile.js" type="module"></script>
+    @* <script src="~/js/customerScripts/cartScripts.js" type="module"></script> *@
+
+}

@@ -13,6 +13,7 @@ namespace WebApplication1_API_MVC_.Models
         [StringLength(250,ErrorMessage ="Description must have maximum 250 lenghth.")]
         public string Description { get; set; }
         [Required]
+        [Range(1,double.MaxValue,ErrorMessage ="Price must be more than 0.")]
         public double Price { get; set; }
         [Required]
         public int Quantity { get; set; }

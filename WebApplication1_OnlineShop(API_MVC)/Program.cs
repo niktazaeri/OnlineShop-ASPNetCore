@@ -37,7 +37,14 @@ namespace WebApplication1_API_MVC_
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
                 options.TokenLifespan = TimeSpan.FromHours(1));
 
-            
+            builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
+
+
+
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IEmailSender, EmailService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();

@@ -34,14 +34,27 @@ namespace WebApplication1_API_MVC_.Context
                 .HasOne(c => c.ParentCategory)
                 .WithMany(c => c.SubCategory)
                 .HasForeignKey(c => c.CategoryParentId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder
                 .Entity<Address>()
                 .HasOne(a => a.User)
                 .WithMany(u => u.Addresses)
                 .HasForeignKey(a => a.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(c => c.Cart)
+                .WithMany(ci => ci.CartItems)
+                .HasForeignKey(c => c.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany() 
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
 
     }

@@ -16,7 +16,7 @@ namespace WebApplication1_API_MVC_.Identity
         public string City { get; set; }
         [Required]
         [RegularExpression(@"^\d{10}$", ErrorMessage ="Not valid! zip code must have 10 digits.")]
-        public int ZipCode { get; set; }
+        public long ZipCode { get; set; }
 
         public string UserId { get; set; }
 

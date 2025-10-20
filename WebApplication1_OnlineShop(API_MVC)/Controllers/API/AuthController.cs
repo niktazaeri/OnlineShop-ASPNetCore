@@ -222,11 +222,17 @@ namespace WebApplication1_API_MVC_.Controllers.API
                 }
                 token = token.Replace("Bearer ", "");
 
-                //var user_token = await _db.Tokens.Include(t => t.User).FirstOrDefaultAsync(t => t.Token == token);
                 if (!token.IsNullOrEmpty())
                 {
                     var user = await _userManager.GetUserAsync(HttpContext.User);
+                    
                     var refresh_token = _db.RefreshTokens.Where(rt => rt.UserId == user.Id && rt.IsRevoked == false);
+
+                    if (refresh_token.Count() == 0)
+                    {
+                        return BadRequest("user has already loggedout");
+                    }
+
                     foreach (var rt in refresh_token)
                     {
                         rt.IsRevoked = true;
@@ -237,18 +243,6 @@ namespace WebApplication1_API_MVC_.Controllers.API
                     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                     return Ok($"{user.UserName} logged out successfully.");
                 }
-                //if (user_token != null)
-                //{
-                //    _db.Tokens.Remove(user_token);
-                //    var refreshTokens = await _db.RefreshTokens.Where(r => r.UserId == user_token.UserId && !r.IsRevoked).ToListAsync();
-                //    foreach (var rt in refreshTokens)
-                //        rt.IsRevoked = true;
-                //    await _db.SaveChangesAsync();
-                //    Response.Cookies.Delete("refreshToken");
-                //    Response.Cookies.Delete("accessToken");
-                //    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                //    return Ok($"{user_token.User.UserName} logged out successfully.");
-                //}
                 return BadRequest();
             }
             catch (Exception ex)
@@ -335,7 +329,7 @@ namespace WebApplication1_API_MVC_.Controllers.API
             return Ok(new { profilePicture = defaultProfilePic , previousProfilePic = dto.ProfilePicture });
 
         }
-        [Authorize(Roles = "Admin",AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "Admin,Customer",AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO dto )
         {
@@ -542,10 +536,11 @@ namespace WebApplication1_API_MVC_.Controllers.API
 
             var claims = new List<Claim>
             {
+                // Required for ASP.NET Identity to map user
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Name, $"{user.FirstName} {user.LastName}"),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),          // important for GetUserAsync
+                new Claim(ClaimTypes.Name, user.UserName),              // User.Identity.Name
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

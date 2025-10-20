@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1_API_MVC_.Context;
 
@@ -11,9 +12,11 @@ using WebApplication1_API_MVC_.Context;
 namespace WebApplication1_API_MVC_.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20251015095542_updateZipCode")]
+    partial class updateZipCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,7 +189,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Identity.ApplicationUser", b =>
@@ -297,7 +300,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Identity.UserToken", b =>
@@ -326,7 +329,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tokens", (string)null);
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.Cart", b =>
@@ -337,20 +340,15 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CartIdentifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.CartItem", b =>
@@ -368,12 +366,6 @@ namespace WebApplication1_API_MVC_.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -381,9 +373,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.Category", b =>
@@ -405,7 +395,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("CategoryParentId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.Order", b =>
@@ -432,7 +422,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.OrderItem", b =>
@@ -457,7 +447,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.Products", b =>
@@ -494,7 +484,7 @@ namespace WebApplication1_API_MVC_.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -553,7 +543,7 @@ namespace WebApplication1_API_MVC_.Migrations
                     b.HasOne("WebApplication1_API_MVC_.Identity.ApplicationUser", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -585,7 +575,9 @@ namespace WebApplication1_API_MVC_.Migrations
                 {
                     b.HasOne("WebApplication1_API_MVC_.Identity.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -598,15 +590,7 @@ namespace WebApplication1_API_MVC_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication1_API_MVC_.Models.Products", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("WebApplication1_API_MVC_.Models.Category", b =>
@@ -614,7 +598,7 @@ namespace WebApplication1_API_MVC_.Migrations
                     b.HasOne("WebApplication1_API_MVC_.Models.Category", "ParentCategory")
                         .WithMany("SubCategory")
                         .HasForeignKey("CategoryParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("ParentCategory");
                 });

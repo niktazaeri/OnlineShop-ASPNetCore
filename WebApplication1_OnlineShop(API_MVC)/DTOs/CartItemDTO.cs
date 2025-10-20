@@ -1,27 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication1_API_MVC_.Models;
 
-namespace WebApplication1_API_MVC_.Models
+namespace WebApplication1_API_MVC_.DTOs
 {
-    public class CartItem
+    public class CartItemDTO
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be more than 0.")]
         public int Quantity { get; set; }
         [Required]
         [Range(1, double.MaxValue, ErrorMessage = "Price must be more than 0.")]
         public double Price { get; set; }
         [Required]
-        [ForeignKey("Cart")]
-        public int CartId { get; set; }
-        public Cart Cart { get; set; }
-        [Required]
         public int ProductId { get; set; }
-        public Products Product { get; set; }
+        [Required]
+        public int CartId { get; set; }
     }
 }
